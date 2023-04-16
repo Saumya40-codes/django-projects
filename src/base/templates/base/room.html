@@ -1,0 +1,7 @@
+{% extends 'base/home.html' %}
+{% block content %}
+<h1>ok</h1>
+<a href="{% url 'index' room_name.id %}">{{room_name.id}}</a> <!-- method 1 -->
+{{room_name.name}}
+<a href="/index/{{room_name.id}}">{{room_name.id}}</a>   <!-- method 2 -->
+{% endblock %}

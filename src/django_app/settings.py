@@ -37,11 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #own app
-    'main.apps.MainConfig',
-    'register.apps.RegisterConfig',
-    'crispy_forms',
-    'crispy_bootstrap4',
+    'base.apps.BaseConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -59,7 +56,9 @@ ROOT_URLCONF = 'django_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates'   #goes back to base dir and find template folder
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,6 +107,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
+
+
+STATIC_URL = '/static/'
+
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -119,14 +123,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = '/static/'
-CRISPY_TEMPLATE_PACK = "bootstrap4"
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-
-LOGIN_REDIRECT_URL = "/10"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

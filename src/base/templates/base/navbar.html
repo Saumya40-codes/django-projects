@@ -1,0 +1,9 @@
+<a href="/">
+    <h1>LOGO</h1>
+</a>
+<!-- <h1>Home</h1> -->
+{% for inf in info %}
+    <a href="{% url 'home'%}">{{inf.name}}</a> <br>
+    {{inf.password}}
+{% endfor %}
+<hr>

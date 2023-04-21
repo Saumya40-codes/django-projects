@@ -1,12 +1,19 @@
 from django.shortcuts import render, redirect
-from .models import Room,Message,Topic
-from .forms import RoomForm,LoginForm, SignUpForm
+from .models import Room,Message,Topic, Test
+from .forms import RoomForm,LoginForm, SignUpForm, TestForm,TopicForm
+from django.db.models import Q
 # Create your views here.
 def home(request):
-    room = Room.objects.all()
-    mess = Message.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    room = Room.objects.filter(
+        Q(topic__name__icontains= q) | #only 'contains' is case sensitive matching
+        Q(name__icontains= q) |
+        Q(description__icontains= q)
+        )   
+
     topic = Topic.objects.all()
-    context = {'rooms': room, 'messages': mess, 'topics': topic}
+    context = {'rooms': room, 'topics': topic, 'top':Topic.objects.all()}
     return render(request, 'base/home.html', context)
 
 
@@ -60,6 +67,8 @@ def updateRoom(request,pk):
 #     {'id': 4, 'name': 'room4'},
 # ]
 
+
+
 def userLogin(request):
     if(request.method == 'POST'):
         form = LoginForm(request.POST)
@@ -78,3 +87,37 @@ def delete(request, pk):
         room.delete()
         return redirect('home')
     return render(request, 'base/delete.html', {'obj':room})
+
+def testIt(request):
+    if(request.method == 'POST'):
+        form = TestForm(request.POST)
+        if(form.is_valid()):
+            print(form)
+            return redirect('home')
+        else:
+            print(form.errors())
+            return redirect('test')
+    form = TestForm()
+    context  = {'form':form}
+    return render(request,'base/test.html',context)
+
+
+def test_update(request):
+    content = Test()
+    form = TestForm(instance=content)
+
+    if request.method == 'POST':
+        form = TestForm(request.POST,instance=content)
+        return redirect('test')
+    
+    context = {'form':form}
+    return render(request,'base/test_update.html',context)\
+
+def createTopic(request):
+    if request.method == 'POST':
+        tp = TopicForm(request.POST)
+        tp.save()
+        return redirect('home')
+    tp = TopicForm()
+    context = {'form':tp}
+    return render(request,'base/topic_form.html',context)

@@ -4,4 +4,5 @@
 <a href="{% url 'index' room_name.id %}">{{room_name.id}}</a> <!-- method 1 -->
 {{room_name.name}}
 <a href="/index/{{room_name.id}}">{{room_name.id}}</a>   <!-- method 2 -->
+<a href="{% url 'update' room_name.id %}"><input type="submit" value="update"></a>
 {% endblock %}

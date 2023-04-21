@@ -7,20 +7,56 @@
     <title>Document</title>
 </head>
 <body>
-    {% include 'base/navbar.html' %} 
+
+    {% include 'navbar.html' %} 
     {% block content %} <br>
-    <a href="{% url 'signUp' %}"> SignUp </a> <br>
+    <style>
+        .home-containers{
+            display: grid;
+            grid-template-columns: 1fr 4fr;
+        }
+    </style>
+
+
+
+
+    <div class="home-containers">
+        <div>
+            <h3>Browse Topics</h3>
+            <hr>
+
+            <a href="{% url 'home' %}"> All </a> <br>
+            {% for tp in top %}  <br>
+            <a href="{% url 'home'%}?q={{tp}}">{{tp}}</a> <br>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="{% url 'signUp' %}"> SignUp </a> <br>
     <a href="{% url 'userLogin' %}"> Login</a> <br>
     <a href="{% url 'createRoom' %}"> Create Room</a> <br>
+
+    <a href="{% url 'test' %}">TEST !</a> <br>
+    <a href="{% url 'topic_new' %}">Create new topic</a> <br>
+
     HELLO <br>
+    <div>
     {% for rm in rooms %}
-    <span>@{{rm.host}}</span>
+    <div> <br>
+        <hr>
+    <span>@{{rm.host}}</span> <br>
         <h1>{{ rm.id }} -- <a href="{% url 'index' rm.id %}">{{rm.name}}</a> -- {{rm.description}} </h1> <br>
         <h2>{{rm.updated}} -- {{rm.created}}</h2>
         <h3>{{rm.topic}}</h3>
         <a href="{% url 'update' rm.id %}">Edit</a> <br>
         <a href="{% url 'delete' rm.id %}"> Delete </a>
+    </div>
     {% endfor %}
+    {{ my_date|date:"Y-m-d" }}
+
+</div>
+</div>
+        </div>
+    </div>
     {% endblock %}
 </body>
 </html>

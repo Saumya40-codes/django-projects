@@ -77,6 +77,14 @@ WSGI_APPLICATION = 'django_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'saumyab5181@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

@@ -1,0 +1,27 @@
+
+<style>
+    body{
+        background-color: aqua;
+        color:blue;
+    }
+    .navbar{
+        display: grid;
+        grid-template-columns: 1fr 4fr;
+    }
+    a{
+        text-decoration: none;
+        color: red ;
+    }
+    input{
+        background-color: aquamarine;
+    }
+</style>
+
+<a href="/">
+    <h1>LOGO</h1>
+</a>
+<!-- <h1>Home</h1> -->
+<form method="get" action="{% url 'home' %}">
+    <input type="text" name="q" placeholder="Search Rooms"/>
+</form>
+<hr>

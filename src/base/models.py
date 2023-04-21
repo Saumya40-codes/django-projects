@@ -50,3 +50,13 @@ class SignUp(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     def __str__(self):
         return self.user
+
+
+
+class Test(models.Model):
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    password = models.CharField(max_length=100)
+    email = models.EmailField(max_length=200)
+
+    def __str__(self):
+        return self.username

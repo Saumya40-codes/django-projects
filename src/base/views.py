@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Room,Message,Topic, Test
-from .forms import RoomForm,LoginForm, SignUpForm, TestForm,TopicForm
+from .models import Room,Message,Topic, Test, SignUp, Loginpage
+from .forms import RoomForm, SignUpForm, TestForm,TopicForm, Loginform
 from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, logout , login as login_dj
+from django.contrib import messages
 # Create your views here.
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -12,10 +15,11 @@ def home(request):
         Q(description__icontains= q)
         )   
 
+    available_rooms = room.count()    
     topic = Topic.objects.all()
-    context = {'rooms': room, 'topics': topic, 'top':Topic.objects.all()}
+    context = {'rooms': room, 'topics': topic, 'top':Topic.objects.all(), 'available_rooms': available_rooms}
     return render(request, 'base/home.html', context)
-
+ 
 
 def index(request,pk):
     room = Room.objects.get(id=pk)
@@ -43,7 +47,13 @@ def createRoom(request):
 
 def signUp(request):
     if(request.method == 'POST'):
-            print(request.POST)
+            name = request.POST.get('user')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            form = SignUpForm(request.POST)
+            if(form.is_valid()):
+                form.save()
+                return redirect('home')
     form = SignUpForm()
     context = {'form': form}
     return render(request, 'base/signup.html', context)
@@ -68,17 +78,6 @@ def updateRoom(request,pk):
 # ]
 
 
-
-def userLogin(request):
-    if(request.method == 'POST'):
-        form = LoginForm(request.POST)
-        if(form.is_valid()):
-            form.save()
-            print(form.cleaned_data)
-            return redirect('home')
-    form = LoginForm()
-    context = {'form': form}
-    return render(request, 'base/user_login.html', context)
 
 
 def delete(request, pk):
@@ -121,3 +120,24 @@ def createTopic(request):
     tp = TopicForm()
     context = {'form':tp}
     return render(request,'base/topic_form.html',context)
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, 'User does not exist')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login_dj(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username or Password is incorrect')
+
+    form = Loginform()
+    context = {'form':form}
+    return render(request,'base/user_login.html', context)

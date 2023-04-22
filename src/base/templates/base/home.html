@@ -17,9 +17,6 @@
         }
     </style>
 
-
-
-
     <div class="home-containers">
         <div>
             <h3>Browse Topics</h3>
@@ -32,7 +29,7 @@
         </div>
         <div>
             <a href="{% url 'signUp' %}"> SignUp </a> <br>
-    <a href="{% url 'userLogin' %}"> Login</a> <br>
+    <a href="{% url 'login' %}"> Login</a> <br>
     <a href="{% url 'createRoom' %}"> Create Room</a> <br>
 
     <a href="{% url 'test' %}">TEST !</a> <br>
@@ -40,6 +37,7 @@
 
     HELLO <br>
     <div>
+        <h5>{{available_rooms}} available rooms</h5>
     {% for rm in rooms %}
     <div> <br>
         <hr>

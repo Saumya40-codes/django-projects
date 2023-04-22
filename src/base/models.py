@@ -37,26 +37,25 @@ class Message(models.Model):
     class Meta:
         ordering = ['-updated', '-cerated']
 
-class UserLogin(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    password = models.CharField(max_length=200)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.user
 
 class SignUp(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=200, null=False, blank=False, unique=True ,default='')
     def __str__(self):
         return self.user
 
-
-
 class Test(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.ForeignKey(User, on_delete=models.CASCADE, max_length=200)
     password = models.CharField(max_length=100)
-    email = models.EmailField(max_length=200)
+    email = models.EmailField(max_length=200, null=False, blank=False)
 
+    def __str__(self):
+        return self.username
+
+class Loginpage(models.Model):
+    username = models.CharField(max_length=200)
+    password = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200, null=False, blank=False)
     def __str__(self):
         return self.username

@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect
 from .models import Room,Message,Topic, Test, SignUp, Loginpage
 from .forms import RoomForm, SignUpForm, TestForm,TopicForm, Loginform
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout , login as login_dj
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse
 # Create your views here.
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    # if(request.user.is_authenticated):
+    #     return redirect('home')
 
     room = Room.objects.filter(
         Q(topic__name__icontains= q) | #only 'contains' is case sensitive matching
@@ -33,7 +39,7 @@ direc =[
     {'name':'saumya', 'password':'lol'},
 ]
 
-
+@login_required(login_url='login')
 def createRoom(request):
     if(request.method == 'POST'):
         form = RoomForm(request.POST)
@@ -46,21 +52,30 @@ def createRoom(request):
 
 
 def signUp(request):
+    page = 'signup'
     if(request.method == 'POST'):
-            name = request.POST.get('user')
-            email = request.POST.get('email')
-            password = request.POST.get('password')
-            form = SignUpForm(request.POST)
-            if(form.is_valid()):
-                form.save()
+        form = UserCreationForm(request.POST)
+        if(form.is_valid()):
+                user =  form.save(commit=False)
+                user.username = user.username.lower()
+                user.save()
+                login_dj(request, user)
                 return redirect('home')
-    form = SignUpForm()
-    context = {'form': form}
-    return render(request, 'base/signup.html', context)
+        else:
+            messages.error(request, 'Username already taken')
+            return redirect('signUp')
+    form = UserCreationForm()
+    context = {'form': form, 'page': page}
+    return render(request, 'base/user_login.html', context)
 
+
+@login_required(login_url='login')
 def updateRoom(request,pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+
+    if request.user != room.host:
+        return HttpResponse('You are not allowed to do this')
 
     if request.method == 'POST':
         form = RoomForm(request.POST, instance=room)
@@ -122,6 +137,10 @@ def createTopic(request):
     return render(request,'base/topic_form.html',context)
 
 def login(request):
+    page = 'login'
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -139,5 +158,9 @@ def login(request):
             messages.error(request, 'Username or Password is incorrect')
 
     form = Loginform()
-    context = {'form':form}
+    context = {'form':form, 'page':page}
     return render(request,'base/user_login.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('home')

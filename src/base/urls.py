@@ -13,4 +13,5 @@ urlpatterns = [
     path('update_test/', views.test_update, name= 'testUpdate'),
     path('topic_new/', views.createTopic,name='topic_new'),
     path('login/', views.login, name='login'),
+    path('logout/', views.logoutUser, name='logoutUser'),
 ]

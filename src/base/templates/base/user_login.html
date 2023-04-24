@@ -4,6 +4,7 @@
 
 <form action="" method="post">
     {% csrf_token %}
+{% if page == 'login' %}
     {{form.as_p}}
     <input type="submit" value="submit">
     {% if messages %}
@@ -11,5 +12,21 @@
             <p>{{message}}</p>
         {% endfor %}
     {% endif %}
+    <p>Don't have an account ?</p>
+    <a href="{% url 'signUp' %}">SignUp Here !!</a>
+</form>
+{% else %}
+<form action="" method="post">
+    {% csrf_token %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    {{form.as_p}}
+    <input type="submit" value="SignUp">
+    <p>Already have an account ?</p>
+    <a href="{% url 'login' %}">Login Here !!</a>
+{% endif %}
 </form>
 {% endblock %}

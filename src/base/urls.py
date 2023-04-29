@@ -14,4 +14,5 @@ urlpatterns = [
     path('topic_new/', views.createTopic,name='topic_new'),
     path('login/', views.login, name='login'),
     path('logout/', views.logoutUser, name='logoutUser'),
+    path("main_search/",views.mainSerch,name='ms'),
 ]

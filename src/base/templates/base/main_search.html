@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+{% block content %}
+<br>
+<form action="" method="post">
+{% csrf_token %}
+<input type="text" name="q" placeholder="Search Rooms">
+<input type="submit" value="Search">
+</form>
+{% if rooms %}
+<p>{{cnt}} rooms found</p>
+{% endif %}
+{% for rm in rooms %}
+    <div> <br>
+        <hr>
+    <span>@{{rm.host}}</span> <br>
+        <h1>{{ rm.id }} -- <a href="{% url 'index' rm.id %}">{{rm.name}}</a> -- {{rm.description}} </h1> <br>
+        <h2>{{rm.updated}} -- {{rm.created}}</h2>
+        <h3>{{rm.topic}}</h3>
+        {% if request.user == rm.host %}
+        <a href="{% url 'update' rm.id %}">Edit</a> <br>
+        <a href="{% url 'delete' rm.id %}"> Delete </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+<br>
+<a href="{% url 'createRoom' %}">Go Back</a>
+
+{% endblock %}

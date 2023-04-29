@@ -164,3 +164,16 @@ def login(request):
 def logoutUser(request):
     logout(request)
     return redirect('home')
+
+def mainSerch(request):
+    if request.method == 'POST':
+        name = request.POST.get('q')
+        room = Room.objects.filter(
+            Q(topic__name__icontains= name) | 
+            Q(name__icontains= name) |
+            Q(description__icontains= name)
+        )
+        cnt = room.count()
+        context = {'rooms': room, 'cnt':cnt}
+        return render(request,'base/main_search.html',context)
+    return render(request,'base/main_search.html')

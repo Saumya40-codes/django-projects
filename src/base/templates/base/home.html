@@ -55,6 +55,7 @@
         <a href="{% url 'update' rm.id %}">Edit</a> <br>
         <a href="{% url 'delete' rm.id %}"> Delete </a>
         {% endif %}
+        <a href="{% url 'index' %}"> Join </a>
     </div>
     {% endfor %}
     {{ my_date|date:"Y-m-d" }}

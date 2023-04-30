@@ -3,6 +3,15 @@
 <h1>ok</h1>
 <a href="{% url 'index' room_name.id %}">{{room_name.id}}</a> <!-- method 1 -->
 {{room_name.name}}
-<a href="/index/{{room_name.id}}">{{room_name.id}}</a>   <!-- method 2 -->
+<a href="/index/{{room_name.id}}">{{room_name.id}}</a> <br>  <!-- method 2 -->
+
+Description:
+{% if room_name.description %}
+<p>{{room_name.description}}</p> <br>
+{% else %}
+<p>No description</p> <br>
+{% endif %}
+{% if request.user == room_name.host %}
 <a href="{% url 'update' room_name.id %}"><input type="submit" value="update"></a>
+{% endif %}
 {% endblock %}

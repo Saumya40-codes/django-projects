@@ -11,9 +11,125 @@
     {% include 'navbar.html' %} 
     {% block content %} <br>
     <style>
-        .home-containers{
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f7f7f7;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: bold;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* Navigation styles */
+        .navbar {
+            display: block;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-links a {
+            padding: 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+
+        .navbar-links a:hover {
+            background-color: white;
+            color: black;
+        }
+
+        /* Home containers */
+        .home-containers {
             display: grid;
             grid-template-columns: 1fr 4fr;
+            margin-top: 80px;
+        }
+
+        /* Topic buttons */
+        .topic-button {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        /* Room containers */
+        .room-container {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .room-container h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .room-container h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .room-container h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .room-container span {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .room-container hr {
+            margin-bottom: 20px;
+            border: none;
+            border-top: 1px solid #ddd;
         }
     </style>
 
@@ -24,10 +140,10 @@
 
             <a href="{% url 'home' %}"> All </a> <br>
             {% for tp in top %}  <br>
-            <a href="{% url 'home'%}?q={{tp}}">{{tp}}</a> <br>
+            <a href="{% url 'home'%}?q={{tp}}" class="topic-button">{{tp}}</a> <br>
             {% endfor %}
         </div>
-        <div>
+        <div class="navbar">
             {% if not request.user.is_authenticated %}
             <a href="{% url 'signUp' %}"> SignUp </a> <br>
             {% endif %}
@@ -45,7 +161,7 @@
     <div>
         <h5>{{available_rooms}} available rooms</h5>
     {% for rm in rooms %}
-    <div> <br>
+    <div class="room-container"> <br>
         <hr>
     <span>@{{rm.host}}</span> <br>
         <h1>{{ rm.id }} -- <a href="{% url 'index' rm.id %}">{{rm.name}}</a> -- {{rm.description}} </h1> <br>
@@ -55,7 +171,7 @@
         <a href="{% url 'update' rm.id %}">Edit</a> <br>
         <a href="{% url 'delete' rm.id %}"> Delete </a>
         {% endif %}
-        <a href="{% url 'tnc' %}"> Join </a>
+        <a href="{% url 'home' %}"> Join </a>
     </div>
     {% endfor %}
     {{ my_date|date:"Y-m-d" }}

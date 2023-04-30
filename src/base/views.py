@@ -22,8 +22,7 @@ def home(request):
         )   
 
     available_rooms = room.count()    
-    topic = Topic.objects.all()
-    context = {'rooms': room, 'topics': topic, 'top':Topic.objects.all(), 'available_rooms': available_rooms}
+    context = {'rooms': room, 'top':set(Topic.objects.all()), 'available_rooms': available_rooms}
     return render(request, 'base/home.html', context)
  
 
@@ -130,8 +129,13 @@ def test_update(request):
 def createTopic(request):
     if request.method == 'POST':
         tp = TopicForm(request.POST)
-        tp.save()
-        return redirect('home')
+        check = Topic.objects.filter(name=tp.data['name'])
+        if not check:
+            tp.save()
+            return redirect('home')
+        else:
+            messages.error(request,'Topic already exists')
+            return redirect('topic_new')
     tp = TopicForm()
     context = {'form':tp}
     return render(request,'base/topic_form.html',context)
@@ -177,3 +181,6 @@ def mainSerch(request):
         context = {'rooms': room, 'cnt':cnt}
         return render(request,'base/main_search.html',context)
     return render(request,'base/main_search.html')
+
+def join(request):
+    return render(request,'base/join.html')

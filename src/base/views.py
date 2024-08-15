@@ -27,8 +27,16 @@ def home(request):
  
 
 def index(request,pk):
-    room = Room.objects.get(id=pk)
-    return render(request, 'base/room.html',{'room_name': room})
+    if(request.method == 'POST'):
+        room = Room.objects.get(id=pk)
+        comments = room.message_set.all().order_by('-cerated')
+        message = Message.objects.create(
+            user = request.user,
+            body = request.POST.get('body'),
+            room = room
+        )
+    context = { 'comment': comments, 'room_name': room}
+    return render(request, 'base/room.html',context)
 
 def nav(request):
     det = {'info': direc}

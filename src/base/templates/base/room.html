@@ -11,6 +11,33 @@ Description:
 {% else %}
 <p>No description</p> <br>
 {% endif %}
+
+<div class="comment-wrapper">
+    <h3>Conversation</h3>
+    <hr>
+    {% for comments in comment %}
+    <div>
+        <small>
+            <strong>{{comments.user}}</strong> <br>
+            {{comments.body}} <br>
+           created on:{{comments.cerated|timesince}} ago<br>
+           updated:{{comments.updated|timesince}} ago<br>
+           <hr>
+        </small>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="comment-form">
+    {% if request.user.is_authenticated %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" name="comment" placeholder="Comment here...">
+        <input type="submit" value="Submit">
+    </form>
+    {% endif %}
+</div>
+
 {% if request.user == room_name.host %}
 <a href="{% url 'update' room_name.id %}"><input type="submit" value="update"></a>
 {% endif %}
